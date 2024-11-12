@@ -16,8 +16,9 @@ import 'controllers/theme/theme_controller.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print("\n\n--------BACKGROUND MESSAGE----------");
+  print("\n${message.data}");
   print(
-      'Title: ${message.notification?.title}\n Body: ${message.notification?.body}\n------------------------------\n');
+      '\nTitle: ${message.notification?.title}\nBody: ${message.notification?.body}\n------------------------------\n');
 }
 
 void main() async {
@@ -79,8 +80,9 @@ _initiateFCM() async {
       //enable foreground listener
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         print("\n\n--------FOREGROUND MESSAGE----------");
+        print("\n${message.data}");
         print(
-            'Title: ${message.notification?.title}\n Body: ${message.notification?.body}\n------------------------------\n');
+            '\nTitle: ${message.notification?.title}\nBody: ${message.notification?.body}\n------------------------------\n');
 
         final notification = message.notification;
         final android = notification?.android;
@@ -93,8 +95,9 @@ _initiateFCM() async {
       //app is opening from background state
       FirebaseMessaging.onMessageOpenedApp.listen((event) {
         print("\n\n-------MESSAGE OPEN FROM BACKGROUND----------");
+        print("\n${event.data}");
         print(
-            'Title: ${event.notification?.title}\n Body: ${event.notification?.body}\n------------------------------\n');
+            '\nTitle: ${event.notification?.title}\nBody: ${event.notification?.body}\n------------------------------\n');
       });
 
       FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
