@@ -4,7 +4,7 @@ const { getMessaging } = require("firebase-admin/messaging");
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./service_account_key.json");
-
+// $env:GOOGLE_APPLICATION_CREDENTIALS="D:\android_studio\ecommerce_shop\server\service_account_key.json"
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
