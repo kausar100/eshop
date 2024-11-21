@@ -1,9 +1,12 @@
 import 'package:ecommerce_shop/controllers/home/home_controller.dart';
+import 'package:ecommerce_shop/controllers/theme/theme_controller.dart';
 import 'package:ecommerce_shop/models/product_response.dart';
 import 'package:ecommerce_shop/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+
+enum ThemeChoice { system, dark, light }
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
@@ -20,31 +23,68 @@ class HomePage extends GetView<HomeController> {
                 padding: const EdgeInsets.all(8.0),
                 child: CustomScrollView(
                   slivers: [
-                    const SliverAppBar(
+                    SliverAppBar(
                         surfaceTintColor: Colors.transparent,
                         floating: true,
                         pinned: true,
-                        leading: FlutterLogo(
+                        leading: const FlutterLogo(
                           size: 24.0,
                         ),
+                        actions: [
+                          PopupMenuButton<ThemeChoice>(
+                            onSelected: (item) {
+                              final themeController =
+                                  Get.find<ThemesController>();
+                              themeController.setTheme(item.name);
+                            },
+                            itemBuilder: (context) => List.generate(3, (index) {
+                              final icon = switch (index) {
+                                0 => Icons.settings,
+                                1 => Icons.dark_mode,
+                                _ => Icons.light_mode
+                              };
+                              final label = switch (index) {
+                                0 => 'System',
+                                1 => 'Dark',
+                                _ => 'Light'
+                              };
+
+                              final choice = switch (index) {
+                                0 => ThemeChoice.system,
+                                1 => ThemeChoice.dark,
+                                _ => ThemeChoice.light
+                              };
+
+                              return PopupMenuItem(
+                                  value: choice,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        icon,
+                                        size: 24,
+                                      ),
+                                      const SizedBox(
+                                        width: 4.0,
+                                      ),
+                                      Text(label)
+                                    ],
+                                  ));
+                            }),
+                          ),
+                        ],
                         title: TextField(
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                          style: theme.textTheme.bodyMedium,
                           decoration: InputDecoration(
                               isCollapsed: true,
-                              contentPadding: EdgeInsets.all(12.0),
-                              prefixIcon: Icon(
+                              contentPadding: const EdgeInsets.all(12.0),
+                              prefixIcon: const Icon(
                                 Icons.search,
-                                color: Colors.grey,
                                 size: 24.0,
                               ),
                               filled: true,
-                              fillColor: Colors.white60,
                               hintText: 'Search...',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14.0,
-                              ),
-                              border: OutlineInputBorder(
+                              hintStyle: theme.textTheme.bodyMedium,
+                              border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(12.0)),
                               )),
@@ -145,7 +185,6 @@ class ProductListItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.only(bottom: 8.0),
         decoration: BoxDecoration(
-            color: Colors.white,
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(12.0)),
         child: Row(

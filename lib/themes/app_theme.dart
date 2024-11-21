@@ -11,6 +11,7 @@ class Themes {
           backgroundColor: Colors.grey.shade50,
           elevation: 0),
       inputDecorationTheme: InputDecorationTheme(
+          fillColor: Colors.white,
           border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(10)),
