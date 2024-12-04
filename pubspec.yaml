@@ -46,6 +46,7 @@ dependencies:
   firebase_in_app_messaging: ^0.7.4+17
   firebase_remote_config: ^4.3.17
   firebase_analytics: ^10.8.9
+  connectivity_plus: ^6.0.3
 
 dev_dependencies:
   flutter_test:

@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app_binding.dart';
+import 'controllers/internet/network_controller.dart';
 import 'controllers/theme/theme_controller.dart';
 
 @pragma('vm:entry-point')
@@ -29,6 +30,7 @@ void main() async {
   _initiateFCM();
   _initiateRemoteConfig();
   await GetStorage.init();
+  Get.put(NetworkManager(), permanent: true);
   runApp(const MyApp());
 }
 
