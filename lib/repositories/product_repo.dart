@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ecommerce_shop/models/product_response.dart';
 import 'package:ecommerce_shop/services/network/api_response.dart';
 import 'package:ecommerce_shop/services/network/api_services.dart';
@@ -21,5 +19,18 @@ class ProductRepository {
       rethrow;
     }
     return [];
+  }
+
+  Future<Product?> getProductsByID({required int id}) async {
+    try {
+      final result = await _apiService.getProductsById(id);
+      if (result.status == Status.success) {
+        return Product.fromJson(result.body);
+      }
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+    return null;
   }
 }

@@ -11,27 +11,39 @@ class NetworkManager extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _checkConnectivity();
-    _subscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    try {
+      _checkConnectivity();
+      _subscription =
+          _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    } catch (err) {
+      print('\n---------------Internet connectivity error--------------\n');
+    }
   }
 
   Future<void> _checkConnectivity() async {
-    var result = await _connectivity.checkConnectivity();
-    _updateConnectionStatus(result);
+    try {
+      var result = await _connectivity.checkConnectivity();
+      _updateConnectionStatus(result);
+    } catch (err) {
+      rethrow;
+    }
   }
 
   void _updateConnectionStatus(List<ConnectivityResult> result) {
-    isConnected.value = !result.contains(ConnectivityResult.none);
-    if (Get.isSnackbarOpen) {
-      Get.closeCurrentSnackbar();
+    try {
+      isConnected.value = !result.contains(ConnectivityResult.none);
+      print(
+          "\n----------------Internet Available : ${isConnected.value}--------------\n");
+      if (Get.isSnackbarOpen) {
+        Get.closeCurrentSnackbar();
+      }
+      if (!isConnected.value) {
+        CommonWidgets.snackBar('error',
+            'Please Check your internet connection!', const Duration(days: 1));
+      }
+    } catch (err) {
+      rethrow;
     }
-    if (!isConnected.value) {
-      CommonWidgets.snackBar('error', 'Please Check your internet connection!',
-          const Duration(days: 1));
-    }
-    print(
-        "\n----------------Internet Available : ${isConnected.value}--------------\n");
   }
 
   @override

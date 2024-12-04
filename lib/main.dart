@@ -24,38 +24,49 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //enable background listener
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  _initiateFCM();
-  _initiateRemoteConfig();
-  await GetStorage.init();
-  Get.put(NetworkManager(), permanent: true);
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    //enable background listener
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    _initiateFCM();
+    _initiateRemoteConfig();
+    await GetStorage.init();
+    Get.put(NetworkManager(), permanent: true);
+  } catch (error) {
+    debugPrint('\n-------------Initialization error - no internet----------\n');
+  }
+
   runApp(const MyApp());
 }
 
 _initiateRemoteConfig() async {
-  final remoteConfig = FirebaseRemoteConfig.instance;
-  await remoteConfig.setConfigSettings(RemoteConfigSettings(
-    fetchTimeout: const Duration(minutes: 1),
-    minimumFetchInterval: const Duration(minutes: 5),
-  ));
+  try {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: const Duration(minutes: 1),
+      minimumFetchInterval: const Duration(minutes: 5),
+    ));
 
-  await remoteConfig.setDefaults(const {
-    "name": 'Md. Golam Kausar',
-    "age": 3.26,
-  });
+    await remoteConfig.setDefaults(const {
+      "name": 'Md. Golam Kausar',
+      "age": 3.26,
+    });
 
-  await remoteConfig.fetchAndActivate();
+    await remoteConfig.fetchAndActivate();
 
-  print(
-      '-------------REMOTE CONFIG-------------\n${remoteConfig.getString('name')} is ${remoteConfig.getInt('age')} years old\n');
-
-  remoteConfig.onConfigUpdated.listen((event) async {
-    await remoteConfig.activate();
     print(
-        '-------------REMOTE CONFIG UPDATE-------------\n${remoteConfig.getString('name')} is ${remoteConfig.getInt('age')} years old\n');
-  });
+        '-------------REMOTE CONFIG-------------\n${remoteConfig.getString('name')} is ${remoteConfig.getInt('age')} years old\n');
+
+    remoteConfig.onConfigUpdated.listen((event) async {
+      await remoteConfig.activate();
+      print(
+          '-------------REMOTE CONFIG UPDATE-------------\n${remoteConfig.getString('name')} is ${remoteConfig.getInt('age')} years old\n');
+    });
+  } catch (error) {
+    debugPrint(
+        '\n----------------Remote config error - no internet--------------\n');
+  }
 }
 
 _initiateFCM() async {

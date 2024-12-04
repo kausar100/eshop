@@ -19,6 +19,17 @@ class ApiServices {
     }
   }
 
+  Future<ApiResponse> getProductsById(int id) async {
+    try {
+      Response response = await _dioClient.dio.get('${ApiConstants.products}/$id');
+      return handleResponse(response);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+
   ApiResponse handleResponse(Response response) {
     ApiResponse result = ApiResponse();
     switch (response.statusCode) {

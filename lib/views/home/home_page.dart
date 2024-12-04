@@ -189,12 +189,15 @@ class ProductListItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0)),
         child: Row(
           children: [
-            Hero(
-              tag: product.id.toString(),
-              child: Image.network(
-                product.image.toString(),
-                height: 100,
-                width: 100,
+            InkWell(
+              onTap: () => Get.find<HomeController>().getProductsByProductID(id: product.id!),
+              child: Hero(
+                tag: product.id.toString(),
+                child: Image.network(
+                  product.image.toString(),
+                  height: 100,
+                  width: 100,
+                ),
               ),
             ),
             Expanded(

@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CommonWidgets {
-  static void snackBar(String type, String message, Duration? duration) async {
+  static void snackBar(String type, String message,
+      [Duration duration = const Duration(seconds: 2)]) async {
     if (Get.isSnackbarOpen) {
       Get.closeCurrentSnackbar();
     }
-    Get.snackbar(type, message,
+    Get.snackbar(type.toUpperCase(), message,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: type == 'error' ? Colors.red : Colors.green,
         colorText: Colors.white,
         margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-        duration: duration ?? const Duration(seconds: 2),
+        duration: duration,
         icon: const Icon(Icons.error, color: Colors.white));
   }
 
